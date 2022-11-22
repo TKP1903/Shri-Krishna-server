@@ -4,12 +4,12 @@ const {
   authService,
   userService,
   tokenService,
-  emailService
+  emailService,
   // more...
 } = require('../services');
 
 const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
+  const user = await userService.createUser({ ...req.body, role: 'user' });
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });

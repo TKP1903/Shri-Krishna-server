@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const { qualifications } = require('../config/qualifications');
 
 /**
  * Add your
@@ -16,8 +17,11 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
+      validate(name) {
+        return name != null && name.length > 0;
+      },
       trim: true,
-      lowerCase: true
+      lowerCase: true,
     },
     email: {
       type: String,
@@ -29,84 +33,95 @@ const userSchema = mongoose.Schema(
         if (!validator.isEmail(value)) {
           throw new Error('Invalid email');
         }
-      }
+      },
     },
-    hashed_password: {
+    // hashed
+    password: {
       type: String,
-      required: true
+      required: true,
+      trim: true,
+      minlength: 7,
     },
+    // hashed_password: {
+    //   type: String,
+    //   required: true,
+    // },
     // salt: {
     //   type: String,
-    //   required: true
+    //   required: true,
     // },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     phone: {
       type: {
         number: {
           type: Number,
           validate: [
-            phone => {
-              return phone.length === 10;
+            (phone) => {
+              return !!phone && phone.length === 10;
             },
-            'Phone number should be 10 digits'
+            'Phone number should be 10 digits',
           ],
-          unique: true
+          unique: true,
         },
-        coutryCode: {
-          type: Number,
-          default: 91
-        }
-      }
+        dailCode: {
+          type: String,
+          default: '+91',
+        },
+      },
+    },
+    qualification: {
+      type: String,
+      enum: qualifications,
+      lowercase: true,
     },
     address: {
       type: String,
       trim: true,
       validate: [
-        address => {
-          return address.length >= 10;
+        (address) => {
+          return !!address && address != null && address.length >= 10;
         },
-        'Address should be at least 10 characters long'
-      ]
+        'Address should be at least 10 characters long',
+      ],
     },
     role: {
       type: String,
       enum: roles,
-      default: 'user'
+      default: 'user',
     },
     country: {
       type: String,
       trim: true,
-      lowerCase: true
+      lowerCase: true,
     },
     city: {
       type: String,
       trim: true,
-      lowerCase: true
+      lowerCase: true,
     },
     state: {
       type: String,
       trim: true,
-      lowerCase: true
+      lowerCase: true,
     },
-    userIP: {
-      type: String,
-      default: null,
-      trim: true
+    userIPs: {
+      type: Array,
+      default: [],
     },
     userBrowsers: {
       type: Array,
-      default: []
+      default: [],
     },
     isEmailVerified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
@@ -120,7 +135,6 @@ userSchema.plugin(paginate);
  * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
-
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;

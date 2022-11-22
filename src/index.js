@@ -27,9 +27,11 @@ const unexpectedErrorHandler = (error) => {
   exitHandler();
 };
 
+// To handle the error when we use async/await
 process.on('uncaughtException', unexpectedErrorHandler);
 process.on('unhandledRejection', unexpectedErrorHandler);
 
+// does not ignore SIGTERM
 process.on('SIGTERM', () => {
   logger.info('SIGTERM received');
   if (server) {

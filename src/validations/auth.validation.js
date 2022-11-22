@@ -1,11 +1,25 @@
 const Joi = require('joi');
 const { password } = require('./custom.validation');
+const { qualifications } = require('../config/qualifications');
 
 const register = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
+    phone: Joi.object().keys({
+      number: Joi.number().required(),
+      dailCode: Joi.string().required(),
+    }),
+    country: Joi.string(),
+    state: Joi.string(),
+    city: Joi.string(),
+    address: Joi.string(),
+    qualification: Joi.string()
+      .required()
+      .valid(...qualifications),
+    ip: Joi.string(),
+    browser: Joi.string(),
   }),
 };
 

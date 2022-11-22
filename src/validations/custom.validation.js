@@ -1,3 +1,12 @@
+const { quilifications } = require('../config/qualifications');
+
+const qualification = (value, helpers) => {
+  if (!quilifications.includes(value)) {
+    return helpers.message('Qualification is not valid');
+  }
+  return value;
+};
+
 const objectId = (value, helpers) => {
   if (!value.match(/^[0-9a-fA-F]{24}$/)) {
     return helpers.message('"{{#label}}" must be a valid mongo id');
@@ -18,4 +27,5 @@ const password = (value, helpers) => {
 module.exports = {
   objectId,
   password,
+  qualification,
 };
