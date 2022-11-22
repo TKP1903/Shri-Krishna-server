@@ -50,6 +50,11 @@ if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
 
+// wellcome message when get request to root
+app.get('/', (req, res) => {
+  res.send('Welcome to the API use /v1 to access the API');
+});
+
 // v1 api routes
 app.use('/v1', routes);
 
