@@ -51,6 +51,7 @@ if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
 
+// static
 app.use(express.static(path.join(__dirname, 'public')));
 
 // v1 api routes

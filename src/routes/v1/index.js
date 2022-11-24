@@ -29,6 +29,8 @@ defaultRoutes.forEach((route) => {
   router.use(route.path, route.route);
 });
 
+// http://43.205.236.93/.well-known/pki-validation/233127A19A0B1DEC4959479ADC9966AC.txt
+
 if (config.env === 'development') {
   devRoutes.forEach((route) => {
     router.use(route.path, route.route);
