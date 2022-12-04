@@ -48,10 +48,20 @@ const deleteUser = {
   }),
 };
 
+const hasRights = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId).required(),
+  }),
+  body: Joi.object().keys({
+    rights: Joi.array().items(Joi.string()).required(),
+  }),
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  hasRights,
 };

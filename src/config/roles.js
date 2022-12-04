@@ -1,7 +1,7 @@
 const allRoles = {
   user: ['getOwnUser', 'getOwnClasses'],
-  admin: ['*', 'getUsers', 'manageUsers'], // admin can do anything '*'
-  employee: ['getUsers', 'manageUsers'],
+  admin: ['*', 'getUsers', 'manageUsers', 'getCourse'], // admin can do anything '*'
+  employee: ['getUsers', 'manageUsers', 'createVideo'],
 };
 
 // give emplyee role access to all user routes

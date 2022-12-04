@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { User } = require('../models');
 
 /**
  * Create a user
@@ -79,6 +79,20 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+/**
+ * Check for rights in the user
+ * @param {ObjectId} userId
+ *
+ */
+const hasRights = async (userId, rights) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  const has = rights.every((right) => !!user.rights[right]);
+  return has;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -86,4 +100,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  hasRights,
 };

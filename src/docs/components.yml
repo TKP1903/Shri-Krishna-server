@@ -18,7 +18,92 @@ components:
         email: fake@example.com
         name: fake name
         role: user
+    Video:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        teacher:
+          type: object
+          properties:
+            userId: 
+              type: string
+              format: objectId
+    Course:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subjects:
+          type: array
+          items:
+            type: string
+        units:
+          type: array
+          items:
+            type: object
+            properties:
+              chapters:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  vedios:
+                    type: array
+                    items:
+                      type: string
+                      format: objectId
+        students:
+          type: array
+          items:
+            type: string
+            format: objectId
+        teachers:
+          type: array
+          items:
+            type: string
+            format: objectId
 
+      example:
+        name: Physics 101
+        description: This is a course about the basics of physics tought
+          to the students in the freshmen year
+        createdAt: 2020-05-12T16:18:04.793Z
+        updatedAt: 2020-05-12T16:18:04.793Z
+        subjects: [ 'a', 'b', c', 'd' ]
+        units: [
+          {
+            chapters: [
+              {
+                name: "chapter 1",
+                description: "desctription",
+                vedios: [
+                  "5ebac534954b54139806c112", "5ebac534954b54139806c112"
+                ],
+              }
+            ]
+          }
+        ]
+        students: [
+          "5ebac534954b54139806c112", "5ebac534954b54139806c112"
+        ]
+        teachers: [
+          "5ebac534954b54139806c112", "5ebac534954b54139806c112"
+        ]
     Token:
       type: object
       properties:
@@ -68,7 +153,7 @@ components:
             message: Please authenticate
     Forbidden:
       description: Forbidden
-      content:
+      content: 
         application/json:
           schema:
             $ref: '#/components/schemas/Error'

@@ -10,12 +10,15 @@ const verifyCallback = (req, resolve, reject, requiredRights) => async (err, use
   req.user = user;
 
   if (requiredRights.length) {
-    // provide access to all routes if '*' right is present
-    if (requiredRights.includes('*')) {
-      return resolve();
-    }
     const userRights = roleRights.get(user.role);
+    // * provide access to all routes if user has '*' right
+    if (userRights.includes('*')) {
+      resolve();
+      return;
+    }
     const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight));
+    // * if user HAS Rights to access the route
+    // * OR wants to access his OWN data
     if (!hasRequiredRights && req.params.userId !== user.id) {
       return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
     }

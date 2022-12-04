@@ -119,6 +119,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    rights: {
+      userPanel: Boolean,
+      adminPanel: Boolean,
+    },
   },
   {
     timestamps: true,
@@ -153,7 +157,7 @@ userSchema.methods.isPasswordMatch = async function (password) {
 userSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
+    user.password = await bcrypt.hash(user.password, 10);
   }
   next();
 });

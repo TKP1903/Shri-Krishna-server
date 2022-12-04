@@ -17,6 +17,10 @@ router
   .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
+// router.route('/isLoggedIn/:userId').get(auth(), validate(userValidation.getUser), userController.doNothing);
+
+// router.route('/hasAccess/:userId').post(auth(), validate(userValidation.hasRights), userController.hasRights);
+
 module.exports = router;
 
 /**
